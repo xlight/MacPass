@@ -72,9 +72,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Th
         with:
-          tag_name: ${{ github.ref }}
-          release_name: "Release ${{ github.ref }} - ${{ env.RELEASE_DATETIME }}"
-          body: "Release created on ${{ env.RELEASE_DATETIME }}"
+          tag_name: ${{ github.sha }}
+          release_name: "Release ${{ github.ref_name }}-${{ github.sha }} ${{ github.event.repository.updated_at}}"
+          body: "Release created on ${{ github.event.repository.updated_at}}"
           files: |
             Localisations.zip
             ./build/Build/Products/Release/MacPass-continuous.zip
