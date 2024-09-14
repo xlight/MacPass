@@ -68,14 +68,13 @@ jobs:
       #      ./build/Build/Products/Release/MacPass.zip.sha256
       
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         #if: startsWith(github.ref, 'refs/tags/')
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Th
         with:
-          tag_name: ${{ steps.version.outputs.builddate }}
-          release_name: "Release ${{ github.ref_name }}-${{ github.sha }} ${{ github.event.repository.updated_at}}"
-          body: "Release created on ${{ github.event.repository.updated_at}}"
+          #tag_name: default to branchname
+          release_name: "Release ${{ github.event.repository.updated_at}} ${{ github.ref_name }}-${{ github.sha }}"
+          name: "Release ${{ github.event.repository.updated_at}} ${{ github.ref_name }}-${{ github.sha }}"
+          generate_release_notes: true
           files: |
             Localisations.zip
             ./build/Build/Products/Release/MacPass.zip
