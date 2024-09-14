@@ -49,12 +49,13 @@ jobs:
       - name: Package Release
         run: |
           cd ./build/Build/Products/Release
-          zip -9ry MacPass-continuous.zip MacPass.app
+          zip -9ry MacPass.zip MacPass.app
       
       - name: Create MD5 Hash
         run: |
+          echo "builddate=$(date +'%Y%m%d%H%M')" >> $GITHUB_OUTPUT
           cd ./build/Build/Products/Release
-          shasum -a 256 MacPass-continuous.zip > MacPass-continuous.zip.sha256
+          shasum -a 256 MacPass.zip > MacPass.zip.sha256
      
       #- name: Release
       #  uses: eine/tip@master
@@ -63,8 +64,8 @@ jobs:
       #    tag: continuous
       #    files: |
       #      Localisations.zip
-      #      ./build/Build/Products/Release/MacPass-continuous.zip
-      #      ./build/Build/Products/Release/MacPass-continuous.zip.sha256
+      #      ./build/Build/Products/Release/MacPass.zip
+      #      ./build/Build/Products/Release/MacPass.zip.sha256
       
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -72,10 +73,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Th
         with:
-          tag_name: "tag-${{ github.event.repository.updated_at}}"
+          tag_name: ${{ steps.version.outputs.builddate }}
           release_name: "Release ${{ github.ref_name }}-${{ github.sha }} ${{ github.event.repository.updated_at}}"
           body: "Release created on ${{ github.event.repository.updated_at}}"
           files: |
             Localisations.zip
-            ./build/Build/Products/Release/MacPass-continuous.zip
-            ./build/Build/Products/Release/MacPass-continuous.zip.sha256
+            ./build/Build/Products/Release/MacPass.zip
+            ./build/Build/Products/Release/MacPass.zip.sha256
